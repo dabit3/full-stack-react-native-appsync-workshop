@@ -583,6 +583,8 @@ __Query.listRestaurants.req.vtl__
 }
 ```
 
+Now when we query for the restaurants, we will only receive the restaurant data for the items that we created.
+
 ## Removing Services
 
 If at any time, or at the end of this workshop, you would like to delete a service from your project & your account, you can do this by running the `amplify remove` command:
