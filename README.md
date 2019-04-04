@@ -106,7 +106,7 @@ amplify init
 
 - Enter a name for the project: __RNAppSyncApp__
 - Enter a name for the environment: __local__
-- Choose your default editor: __(<your favorite editor>)__   
+- Choose your default editor: __(your favorite editor)__   
 - Please choose the type of app that you're building __javascript__   
 - What javascript framework are you using __react-native__   
 - Source Directory Path: __/__   
