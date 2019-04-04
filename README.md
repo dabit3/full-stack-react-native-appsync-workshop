@@ -390,6 +390,8 @@ Recreate this functionality in Hooks
 
 > For direction, check out the tutorial [here](https://medium.com/open-graphql/react-hooks-for-graphql-3fa8ebdd6c62)
 
+> For the solution to this challenge, view the [hooks](hooks.js) file. __Note__ that Expo does not yet support hooks.
+
 ## Adding Authentication
 
 To add authentication, we can use the following command:
