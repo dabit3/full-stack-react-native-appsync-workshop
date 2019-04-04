@@ -306,9 +306,14 @@ createRestaurant = async() => {
   }
   
   const updatedRestaurantArray = [...this.state.restaurants, restaurant]
-  this.setState({ restaurants: updatedRestaurantArray })
+  this.setState({
+    restaurants: updatedRestaurantArray,
+    name: '', description: '', city: ''
+    })
   try {
-    await API.graphql(graphqlOperation(createRestaurant, restaurant))
+    await API.graphql(graphqlOperation(createRestaurant, {
+      input: restaurant
+    }))
     console.log('item created!')
   } catch (err) {
     console.log('error creating restaurant...', err)
