@@ -2,7 +2,7 @@
 
 In this workshop we'll learn how to build cloud-enabled mobile applications with React Native, [AWS AppSync](https://aws.amazon.com/appsync/) & [AWS Amplify](https://aws-amplify.github.io/).
 
-![](appsyncrnheader.jpg)
+![](appsyncrngqlheader.jpg)
 
 ### Topics we'll be covering:
 
