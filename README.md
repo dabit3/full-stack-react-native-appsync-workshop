@@ -355,7 +355,7 @@ To do so, we need to define the subscription, listen for the subscription, & upd
 import { onCreateRestaurant } from './src/graphql/subscriptions'
 
 // define the subscription in the class
-this.subscription = {}
+subscription = {}
 
 // subscribe in componentDidMount
 componentDidMount() {
@@ -367,7 +367,7 @@ componentDidMount() {
         const restaurant = eventData.value.data.onCreateRestaurant
         if(CLIENTID === restaurant.clientId) return
         const restaurants = [...this.state.restaurants, restaurant]
-        setState({ restaurants })
+        this.setState({ restaurants })
       }
   });
 }
@@ -394,7 +394,7 @@ amplify add auth
 
 > When prompted for __Do you want to use default authentication and security configuration?__, choose __Yes__
 
-Now, we'll run the push command and the cloud resources will be created in our AWS account.
+Now, we'll run the push command and the cloud resources will be created in your AWS account.
 
 ```bash
 amplify push
@@ -413,7 +413,7 @@ import { withAuthenticator } from 'aws-amplify-react-native'
 Next, we'll wrap our default export (the App component) with the `withAuthenticator` HOC:
 
 ```js
-export default withAuthenticator(App)
+export default withAuthenticator(App, { includeGreetings: true })
 ```
 
 Now, we can run the app and see that an Authentication flow has been added in front of our App component. This flow gives users the ability to sign up & sign in.
@@ -434,36 +434,23 @@ async componentDidMount() {
 }
 ```
 
-### Signing out the user using the withAuthenticator HOC
+### Manually signing out the user using the withAuthenticator HOC
 
 We can sign the user out using the `Auth` class & calling `Auth.signOut()`. This function returns a promise that is fulfilled after the user session has been ended & AsyncStorage is updated.
-
-Because `withAuthenticator` holds all of the state within the actual component, we must have a way to rerender the actual `withAuthenticator` component by forcing React to rerender the parent component.
 
 To do so, let's make a few updates:
 
 ```js
-// index.js
-class AppWrapper extends React.Component {
-  rerender = () => this.forceUpdate()
-  render() {
-    return <App rerender={this.rerender} />
-  }
-}
-
-AppRegistry.registerComponent(appName, () => AppWrapper);
-
-// App.js
 class App extends Component {
   signOut = async () => {
     await Auth.signOut()
-    this.props.rerender()
+    this.props.onStateChange('signedOut', null);
   }
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text onPress={this.signOut} style={styles.instructions}>Sign Out</Text>
+        <Text onPress={this.signOut}>Sign Out</Text>
       </View>
     );
   }
@@ -529,10 +516,77 @@ Next we need to change the AppSync API to now use the newly created Cognito Auth
 To do so, we'll reconfigure the API:
 
 ```sh
-amplify configure
+amplify configure api
+
+> Please select from one of the below mentioned services: GraphQL
+> Choose an authorization type for the API: Amazon Cognito User Pool
+
+amplify push
 ```
 
+### Fine Grained access control
 
+Next, let's look at how to use the identity of the user to associate items created in the database with the logged in user & then query the database using these credentials.
+
+To do so, we'll store the user's identity in the database table as `userId` & add a new index on the table to query for this user ID.
+
+#### Adding an index to the table
+
+Next, we'll want to add a new GSI (global secondary index) in the table. We do this so we can query on the index to add a new access pattern.
+
+To do this, open the [AppSync Console](https://console.aws.amazon.com/appsync/home), choose your API & click on __Data Sources__. Next, click on the data source link.
+
+From here, click on the __Indexes__ tab & click __Create index__.
+
+For the __partition key__, input `userId` to create a `userId-index` Index name & click __Create index__.
+
+Next, we'll update the resolver for adding restaurants & querying for restaurants.
+
+#### Updating the resolvers
+
+In the folder __amplify/backend/api/RestaurantAPI/resolvers__, create the following two resolvers:
+
+__Mutation.createRestaurant.req.vtl__ & __Query.listRestaurants.req.vtl__.
+
+__Mutation.createRestaurant.req.vtl__
+
+```vtl
+$util.qr($context.args.input.put("createdAt", $util.time.nowISO8601()))
+$util.qr($context.args.input.put("updatedAt", $util.time.nowISO8601()))
+$util.qr($context.args.input.put("__typename", "Restaurant"))
+$util.qr($context.args.input.put("userId", $ctx.identity.sub))
+
+{
+  "version": "2017-02-28",
+  "operation": "PutItem",
+  "key": {
+      "id":     $util.dynamodb.toDynamoDBJson($util.defaultIfNullOrBlank($ctx.args.input.id, $util.autoId()))
+  },
+  "attributeValues": $util.dynamodb.toMapValuesJson($context.args.input),
+  "condition": {
+      "expression": "attribute_not_exists(#id)",
+      "expressionNames": {
+          "#id": "id"
+    }
+  }
+}
+```
+
+__Query.listRestaurants.req.vtl__
+
+```vtl
+{
+    "version" : "2017-02-28",
+    "operation" : "Query",
+    "index" : "userId-index",
+    "query" : {
+        "expression": "userId = :userId",
+        "expressionValues" : {
+            ":userId" : $util.dynamodb.toDynamoDBJson($ctx.identity.sub)
+        }
+    }
+}
+```
 
 ## Removing Services
 
