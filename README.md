@@ -585,6 +585,113 @@ __Query.listRestaurants.req.vtl__
 
 Now when we query for the restaurants, we will only receive the restaurant data for the items that we created.
 
+#### Creating custom resolvers
+
+Now let's say we want to define & use a custom GraphQL operation & resolver that does not yet exist? We can also do that using Amplify & the local environment.
+
+To do so, we need to do three things:
+
+1. Define the operations we'd like to have available in our schema (add queries, mutations, subscriptions to __schema.graphql__).
+
+To do so, update __amplify/backend/api/RestaurantAPI/schema.graphql__ to the following:
+
+```graphql
+type Restaurant @model {
+  id: ID!
+  clientId: String
+  name: String!
+  description: String!
+  city: String!
+}
+
+type ModelRestaurantConnection {
+	items: [Restaurant]
+	nextToken: String
+}
+
+type Query {
+  listAllRestaurants(limit: Int, nextToken: String): ModelRestaurantConnection
+}
+```
+
+2. Create the request & response mapping templates in __amplify/backend/api/RestaurantAPI/resolvers__.
+
+__Query.listAllRestaurants.req.vtl__
+
+```vtl
+{
+    "version" : "2017-02-28",
+    "operation" : "Scan",
+    "limit": $util.defaultIfNull(${ctx.args.limit}, 20),
+    "nextToken": $util.toJson($util.defaultIfNullOrBlank($ctx.args.nextToken, null))
+}
+```
+
+__Query.listAllRestaurants.res.vtl__
+
+```vtl
+{
+    "items": $util.toJson($ctx.result.items),
+    "nextToken": $util.toJson($util.defaultIfNullOrBlank($context.result.nextToken, null))
+}
+```
+
+3. Update __amplify/backend/api/RestaurantAPI/resources/CustomResources.json__ with the definition of the custom resource.
+
+Update the `Resources` field in __CustomResources.json__ to the following:
+
+```json
+{
+  ...rest of template,
+  "Resources": {
+    "QueryListAllRestaurantsResolver": {
+      "Type": "AWS::AppSync::Resolver",
+      "Properties": {
+        "ApiId": {
+          "Ref": "AppSyncApiId"
+        },
+        "DataSourceName": "RestaurantTable",
+        "TypeName": "Query",
+        "FieldName": "listAllRestaurants",
+        "RequestMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Query.listAllRestaurants.req.vtl",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              }
+            }
+          ]
+        },
+        "ResponseMappingTemplateS3Location": {
+          "Fn::Sub": [
+            "s3://${S3DeploymentBucket}/${S3DeploymentRootKey}/resolvers/Query.listAllRestaurants.res.vtl",
+            {
+              "S3DeploymentBucket": {
+                "Ref": "S3DeploymentBucket"
+              },
+              "S3DeploymentRootKey": {
+                "Ref": "S3DeploymentRootKey"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  ...rest of template,
+}
+```
+
+Now that everything has been updated, run the push command again:
+
+```sh
+amplify push
+```
+
 ## Removing Services
 
 If at any time, or at the end of this workshop, you would like to delete a service from your project & your account, you can do this by running the `amplify remove` command:
