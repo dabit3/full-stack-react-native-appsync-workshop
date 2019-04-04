@@ -329,15 +329,15 @@ onChange = (key, value) => {
 <TextInput
   onChangeText={v => this.onChange('name', v)}
   value={this.state.name}
-  style={{ width: 300, height: 50, margin: 5, backgroundColor: "#ddd" }}
+  style={{ height: 50, margin: 5, backgroundColor: "#ddd" }}
 />
 <TextInput
-  style={{ width: 300, height: 50, margin: 5, backgroundColor: "#ddd" }}
+  style={{ height: 50, margin: 5, backgroundColor: "#ddd" }}
   onChangeText={v => this.onChange('description', v)}
   value={this.state.description}
 />
 <TextInput
-  style={{ width: 300, height: 50, margin: 5, backgroundColor: "#ddd" }}
+  style={{ height: 50, margin: 5, backgroundColor: "#ddd" }}
   onChangeText={v => this.onChange('city', v)}
   value={this.state.city}
 />
