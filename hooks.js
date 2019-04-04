@@ -61,7 +61,7 @@ function reducer(state, action) {
         ...state,
         restaurants: [...state.restaurants, action.restaurant]
       };
-    case 'input':
+    case 'updateInput':
       return {
         ...state,
         [action.inputType]: action.inputValue
@@ -78,10 +78,10 @@ function reducer(state, action) {
   name='name'
   value={this.state.name}
   onChangeText={v => dispatch({
-      type: 'add',
+      type: 'updateInput',
       inputType: 'name',
-      inputValue: v}
-    )}
+      inputValue: v
+    })}
 />
 
 async function createRestaurant(restaurant, dispatch) {
