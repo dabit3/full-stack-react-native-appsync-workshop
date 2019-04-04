@@ -122,7 +122,7 @@ Now, the AWS Amplify CLI has iniatilized a new project & you will see a couple o
 
 We need to configure our React Native application to be aware of our new AWS Amplify project. We can do this by referencing the auto-generated `aws-exports.js` file that is now in our root folder.
 
-To configure the app, open __index.js__ and add the following code below the last import:
+To configure the app, open __App.js__ or __index.js__ and add the following code below the last import:
 
 ```js
 import Amplify from 'aws-amplify'
@@ -166,7 +166,14 @@ type Restaurant @model {
 
 ```bash
 amplify push
+
+> Do you want to generate code for your newly created GraphQL API: Y
+> Choose the code generation language target: <Your target>
+> Enter the file name pattern of graphql queries, mutations and subscriptions: (src/graphql/**/*.js)
+> Do you want to generate/update all possible GraphQL operations - queries, mutations and subscriptions: Y
+> Enter maximum statement depth [increase from default if your schema is deeply nested]: (2)
 ```
+
 
 > To view the new AWS AppSync API at any time after its creation, go to the dashboard at [https://console.aws.amazon.com/appsync](https://console.aws.amazon.com/appsync). Also be sure that your region is set correctly.
 
@@ -174,11 +181,11 @@ amplify push
 
 In the AWS AppSync console, open your API & then click on Queries.
 
-Execute the following mutation to create a new pet in the API:
+Execute the following mutation to create a new restaurant in the API:
 
 ```graphql
 mutation createRestaurant {
-  createTalk(input: {
+  createRestaurant(input: {
     name: "Nobu"
     description: "Great Sushi"
     city: "New York"
@@ -188,7 +195,7 @@ mutation createRestaurant {
 }
 ```
 
-Now, let's query for the pet:
+Now, let's query for the restaurant:
 
 ```graphql
 query listRestaurants {
@@ -207,7 +214,7 @@ We can even add search / filter capabilities when querying:
 
 ```graphql
 query searchRestaurants {
-  searchRestaurants(filter: {
+  listRestaurants(filter: {
     city: {
       contains: "New York"
     }
@@ -292,7 +299,7 @@ state = {
   name: '', description: '', city: '', restaurants: []
 }
 
-createPet = async() => {
+createRestaurant = async() => {
   const { name, description, city  } = this.state
   const restaurant = {
     name, description, city, clientId: CLIENTID
