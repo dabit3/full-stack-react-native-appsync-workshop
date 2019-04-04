@@ -6,11 +6,11 @@ In this workshop we'll learn how to build cloud-enabled mobile applications with
 
 ### Topics we'll be covering:
 
-- [GraphQL API with AWS AppSync](https://github.com/dabit3/aws-amplify-workshop-react-native#adding-a-rest-api)
-- [Authentication](https://github.com/dabit3/aws-amplify-workshop-react-native#adding-authentication)
-- [Adding Authorization to the AWS AppSync API]
+- [GraphQL API with AWS AppSync](https://github.com/dabit3/full-stack-react-native-appsync#adding-a-graphql-api-with-aws-appsync)
+- [Authentication](https://github.com/dabit3/full-stack-react-native-appsync#adding-authentication)
+- [Adding Authorization to the AWS AppSync API](https://github.com/dabit3/full-stack-react-native-appsync#adding-authentication)
 - [Creating & working with multiple serverless environments]
-- [Deleting the resources]
+- [Deleting the resources](https://github.com/dabit3/full-stack-react-native-appsync#deleting-the-amplify-project--associated-services)
 
 ## Redeeming our AWS Credit   
 
@@ -581,6 +581,12 @@ __Query.listRestaurants.req.vtl__
         }
     }
 }
+```
+
+Next, run the push command again to update the API:
+
+```sh
+amplify push
 ```
 
 Now when we query for the restaurants, we will only receive the restaurant data for the items that we created.
