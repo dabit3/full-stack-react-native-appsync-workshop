@@ -8,7 +8,7 @@ In this workshop we'll learn how to build cloud-enabled mobile applications with
 
 - [GraphQL API with AWS AppSync](https://github.com/dabit3/full-stack-react-native-appsync#adding-a-graphql-api-with-aws-appsync)
 - [Authentication](https://github.com/dabit3/full-stack-react-native-appsync#adding-authentication)
-- [Adding Authorization to the AWS AppSync API](https://github.com/dabit3/full-stack-react-native-appsync#adding-authentication)
+- [Adding Authorization to the AWS AppSync API](https://github.com/dabit3/full-stack-react-native-appsync#updating-the-appsync-api-to-use-the-new-authentication-service)
 - [Creating & working with multiple serverless environments]
 - [Deleting the resources](https://github.com/dabit3/full-stack-react-native-appsync#deleting-the-amplify-project--associated-services)
 
