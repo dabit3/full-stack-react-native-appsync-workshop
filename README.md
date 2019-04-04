@@ -455,11 +455,6 @@ class App extends Component {
     );
   }
 }
-
-export default props =>  {
-  const AppComponent = withAuthenticator(App)
-  return <AppComponent {...props} />
-}
 ```
 
 ### Custom authentication strategies
