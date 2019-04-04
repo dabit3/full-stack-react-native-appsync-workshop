@@ -84,7 +84,7 @@ function reducer(state, action) {
     })}
 />
 
-async function createRestaurant(restaurant, dispatch) {
+async function createRestaurant(dispatch) {
   const { name, description, city } = state
   const restaurant = {
     name, description, city, clientId: CLIENTID
