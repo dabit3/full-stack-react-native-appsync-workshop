@@ -708,7 +708,7 @@ amplify push
 
 ## Multiple Serverless Environments
 
-Now that we have our API up & running, what would happen if we wanted to update our API but wanted to test it out without it affecting our existing version?
+Now that we have our API up & running, what if we wanted to update our API but wanted to test it out without it affecting our existing version?
 
 To do so, we can create a clone of our existing environment, test it out, & then deploy & test the new resources.
 
