@@ -654,7 +654,7 @@ __Query.listAllRestaurants.res.vtl__
 }
 ```
 
-3. Update __amplify/backend/api/RestaurantAPI/resources/CustomResources.json__ with the definition of the custom resource.
+3. Update __amplify/backend/api/RestaurantAPI/stacks/CustomResources.json__ with the definition of the custom resource.
 
 Update the `Resources` field in __CustomResources.json__ to the following:
 
