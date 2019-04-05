@@ -458,20 +458,13 @@ We can sign the user out using the `Auth` class & calling `Auth.signOut()`. This
 To do so, let's make a few updates:
 
 ```js
-class App extends Component {
-  signOut = async () => {
-    await Auth.signOut()
-    this.props.onStateChange('signedOut', null);
-  }
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text onPress={this.signOut}>Sign Out</Text>
-      </View>
-    );
-  }
+// add a sign out method
+signOut = async () => {
+  await Auth.signOut()
+  this.props.onStateChange('signedOut', null);
 }
+// add a button
+<Text onPress={this.signOut}>Sign Out</Text>
 ```
 
 ### Custom authentication strategies
