@@ -348,6 +348,15 @@ onChange = (key, value) => {
   value={this.state.city}
 />
 <Button onPress={this.createRestaurant} title='Create Restaurant' />
+
+// update styles to remove alignItems property
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+  },
+});
 ```
 
 ### GraphQL Subscriptions
