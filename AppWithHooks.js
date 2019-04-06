@@ -58,6 +58,14 @@ async function getRestaurants(dispatch) {
   }
 }
 
+const updater = (value, inputValue, dispatch) => {
+  dispatch({
+    type: 'updateInput',
+    value,
+    inputValue
+  })
+}
+
 async function CreateRestaurant(state, dispatch) {
   const { name, description, city  } = state
   const restaurant = {
@@ -103,31 +111,19 @@ function App() {
   return (
     <View style={styles.container}>
       <TextInput
-          onChangeText={v => dispatch({
-            type: 'updateInput',
-            inputValue: 'name',
-            value: v
-          })}
+          onChangeText={v => updater(v, 'name', dispatch)}
           value={state.name}
           style={{ height: 50, margin: 5, backgroundColor: "#ddd" }}
         />
         <TextInput
           placeholder="description"
           style={{ height: 50, margin: 5, backgroundColor: "#ddd" }}
-          onChangeText={v => dispatch({
-            type: 'updateInput',
-            inputValue: 'description',
-            value: v
-          })}
+          onChangeText={v => updater(v, 'description', dispatch)}
           value={state.description}
         />
         <TextInput
           style={{ height: 50, margin: 5, backgroundColor: "#ddd" }}
-          onChangeText={v => dispatch({
-            type: 'updateInput',
-            inputValue: 'city',
-            value: v
-          })}
+          onChangeText={v => updater(v, 'city', dispatch)}
           value={state.city}
         />
         <Button onPress={() => CreateRestaurant(state, dispatch)} title='Create Restaurant' />
@@ -167,3 +163,4 @@ const styles = StyleSheet.create({
 });
 
 export default App
+
