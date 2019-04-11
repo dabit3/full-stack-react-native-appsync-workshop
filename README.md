@@ -178,6 +178,7 @@ amplify push
 > Enter the file name pattern of graphql queries, mutations and subscriptions: (src/graphql/**/*.js)
 > Do you want to generate/update all possible GraphQL operations - queries, mutations and subscriptions: Y
 > Enter maximum statement depth [increase from default if your schema is deeply nested]: (2)
+> Enter the file name for the generated code <src/API.js>
 ```
 
 
